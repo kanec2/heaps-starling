@@ -251,9 +251,3 @@ class DisplayObjectContainer extends DisplayObject
 		}
 	}
 }
-
-/** Interface for disposable objects. */
-interface IDisposable
-{
-	function dispose():Void;
-}

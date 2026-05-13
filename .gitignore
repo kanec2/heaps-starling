@@ -1,44 +1,35 @@
 ```
-# Compiled and build artifacts
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
-
-# Dependencies
+# Haxe/Haxelib specific
 .haxelib/
-node_modules/
+haxelib/
 
-# Build directories
+# Build artifacts
+.npm/
 bin/
 lib/
 obj/
 out/
+target/
+build/
+dist/
+release/
+debug/
 
-# IDE/Editor files
+# Dependencies
+node_modules/
+vendor/
+
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-*.tmp
+*~
 
 # Logs
 *.log
 
-# System files
+# OS generated files
 .DS_Store
 Thumbs.db
-
-# Coverage reports
-coverage/
-htmlcov/
-*.coverage
-
-# Haxe specific
-.neko
-*.n
-*.neko
 ```

@@ -13,6 +13,12 @@ package starling.display;
 
 import starling.textures.Texture;
 
+/** Interface for disposable objects. */
+interface IDisposable
+{
+	function dispose():Void;
+}
+
 /**
  * A Quad represents a colored rectangle.
  * Quads are optimized for rendering and are the base class for Image.

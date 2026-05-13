@@ -31,6 +31,9 @@ class Event
 	public static inline var COMPLETE = "complete";
 	public static inline var CANCEL = "cancel";
 	public static inline var SCROLL = "scroll";
+	public static inline var READY = "ready";
+	public static inline var CONTEXT_LOST = "contextLost";
+	public static inline var CONTEXT_RESTORED = "contextRestored";
 	
 	/** The type of event. */
 	public var type(default, null):String;
