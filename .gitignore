@@ -1,0 +1,35 @@
+```
+# Haxe/Haxelib specific
+.haxelib/
+haxelib/
+
+# Build artifacts
+.npm/
+bin/
+lib/
+obj/
+out/
+target/
+build/
+dist/
+release/
+debug/
+
+# Dependencies
+node_modules/
+vendor/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+```

@@ -1,0 +1,14 @@
+# Compile configuration for Starling Heaps
+
+-cp src
+-lib heaps
+-main Main
+
+# JavaScript target
+--js bin/main.js
+
+# Or for HashLink:
+# -hl bin/main.hl
+
+# Optimization flags
+-D release

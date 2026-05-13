@@ -1,0 +1,5 @@
+-cp src
+-cp tests
+-main TestStarling
+-lib heaps
+-js tests/output/test_starling.js
