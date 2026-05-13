@@ -1,0 +1,12 @@
+{
+	"name": "starling-heaps",
+	"url": "https://github.com/user/starling-heaps",
+	"license": "BSD",
+	"tags": [ "starling", "2d", "gpu", "heaps", "haxe" ],
+	"description": "Starling Framework port for Heaps - Cross-Platform Game Engine",
+	"version": "1.0.0",
+	"releasenote": "Initial port of Starling Framework for Heaps",
+	"contributors": [ "contributor" ],
+	"dependencies": { "heaps": "" },
+	"classPath": "src"
+}
