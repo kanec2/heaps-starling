@@ -11,90 +11,68 @@
 
 package starling.events;
 
-import haxe.ds.StringMap;
+import hxd.Event;
 
 /**
- * The EventDispatcher class allows you to dispatch events and listen for them.
+ * Простой диспетчер событий в стиле Starling.
  */
-class EventDispatcher
-{
-	var _listeners:StringMap<Array<Event->Void>>;
+class EventDispatcher {
 	
-	public function new()
-	{
-		_listeners = new StringMap();
+	private var _listeners:Map<String, Array<Listener>> = new Map();
+	
+	public function new() {}
+	
+	public function addEventListener(type:String, listener:Dynamic->Void, 
+	                                 useCapture:Bool = false, priority:Int = 0):Void {
+		if (!_listeners.exists(type)) {
+			_listeners.set(type, []);
+		}
+		_listeners.get(type).push({
+			listener: listener,
+			priority: priority,
+			useCapture: useCapture
+		});
+		// Сортируем по приоритету
+		_listeners.get(type).sort((a, b) -> b.priority - a.priority);
 	}
 	
-	/**
-	 * Registers an event listener at a certain object.
-	 */
-	public function addEventListener(type:String, listener:Event->Void):Void
-	{
-		if (_listeners == null)
-			_listeners = new StringMap();
-		
-		if (!_listeners.exists(type))
-			_listeners.set(type, []);
+	public function removeEventListener(type:String, listener:Dynamic->Void, 
+	                                    useCapture:Bool = false):Void {
+		if (!_listeners.exists(type)) return;
 		
 		var list = _listeners.get(type);
-		if (list.indexOf(listener) < 0)
-			list.push(listener);
-	}
-	
-	/**
-	 * Removes an event listener from the object.
-	 */
-	public function removeEventListener(type:String, listener:Event->Void):Void
-	{
-		if (_listeners != null && _listeners.exists(type))
-		{
-			var list = _listeners.get(type);
-			var index = list.indexOf(listener);
-			if (index >= 0)
-				list.splice(index, 1);
-		}
-	}
-	
-	/**
-	 * Removes all event listeners with a certain type, or all of them if type is null.
-	 */
-	public function removeEventListeners(type:String = null):Void
-	{
-		if (type == null)
-			_listeners = new StringMap();
-		else if (_listeners != null)
-			_listeners.remove(type);
-	}
-	
-	/**
-	 * Dispatches an event to all registered listeners.
-	 */
-	public function dispatchEvent(event:Event):Void
-	{
-		if (_listeners == null || !_listeners.exists(event.type))
-			return;
-		
-		var list = _listeners.get(event.type);
-		if (list == null || list.length == 0)
-			return;
-		
-		// Create a copy to avoid issues when listeners modify the list
-		var listenersCopy = list.copy();
-		
-		for (listener in listenersCopy)
-		{
-			if (event.isImmediateStopped())
+		for (i in 0...list.length) {
+			if (list[i].listener == listener && list[i].useCapture == useCapture) {
+				list.splice(i, 1);
 				break;
-			
-			listener(event);
+			}
 		}
 	}
 	
-	/**
-	 * Checks if there are any listeners registered for a certain event type.
-	 */
-	public function hasEventListener(type:String):Bool
-	{
-		return _listeners != null && _listeners.exists(type) && _listeners.get(type).length > 0;
+	public function dispatchEvent(event:Event):Bool {
+		if (!_listeners.exists(event.type)) return false;
+		
+		for (entry in _listeners.get(event.type)) {
+			entry.listener(event);
+		}
+		return true;
+	}
+	
+	public function hasEventListener(type:String):Bool {
+		return _listeners.exists(type) && _listeners.get(type).length > 0;
+	}
+	
+	public function removeAllListeners(?type:String):Void {
+		if (type != null) {
+			_listeners.remove(type);
+		} else {
+			_listeners = new Map();
+		}
+	}
+	
+	private typedef Listener = {
+		var listener:Dynamic->Void;
+		var priority:Int;
+		var useCapture:Bool;
 	}
 }

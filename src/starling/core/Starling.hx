@@ -11,13 +11,10 @@
 
 package starling.core;
 
+import h3d.scene.Graphics;
+import h3d.scene.Scene;
 import hxd.Timer;
 import hxd.App;
-import h2d.Graphics;
-import h2d.Bitmap;
-import h2d.Object;
-import h2d.Tile;
-import h2d.Scene;
 import h3d.Vector;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
@@ -96,7 +93,7 @@ class Starling extends EventDispatcher
 	public var heapsScene(default, null):Scene;
 	
 	/** The graphics context for rendering. */
-	var _graphics:h2d.Graphics;
+	var _graphics:Graphics;
 	
 	/** The last frame's time for delta calculation. */
 	var _lastTime:Float = 0.0;
@@ -116,14 +113,14 @@ class Starling extends EventDispatcher
 	 * @param rootClass The class that will be instantiated as the root display object.
 	 * @param heapsScene The Heaps scene to render into. If null, uses hxd.Stage's scene.
 	 */
-	public function new(rootClass:Class<DisplayObjectContainer>, ?heapsScene:Scene)
+	public function new(rootClass:Class<DisplayObjectContainer>, ?app:App)
 	{
 		super();
 		
 		Starling.current = this;
 		
 		// Set up the Heaps scene
-		this.heapsScene = heapsScene != null ? heapsScene : App.instance.scene;
+		this.heapsScene = heapsScene != null ? heapsScene : app.s3d;
 		
 		// Create the stage (top-level container)
 		stage = new Sprite();
@@ -151,7 +148,8 @@ class Starling extends EventDispatcher
 		}
 		
 		// Listen for resize events
-		App.instance.addEventTarget(onAppResize, [hxd.EventKind.Resize]);
+		//app.s3d.
+		//.addEventTarget(onAppResize, [hxd.EventKind.Resize]);
 	}
 	
 	/**

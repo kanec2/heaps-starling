@@ -14,95 +14,101 @@ package starling.events;
 /**
  * The Event class allows you to create objects that are passed up and down the display list.
  */
-@:keep
-class Event
-{
-	// Event types
-	public static inline var ADDED = "added";
-	public static inline var ADDED_TO_STAGE = "addedToStage";
-	public static inline var REMOVED = "removed";
-	public static inline var REMOVED_FROM_STAGE = "removedFromStage";
-	public static inline var ENTER_FRAME = "enterFrame";
-	public static inline var TOUCH = "touch";
-	public static inline var KEY_UP = "keyUp";
-	public static inline var KEY_DOWN = "keyDown";
-	public static inline var RESIZE = "resize";
-	public static inline var CHANGE = "change";
-	public static inline var COMPLETE = "complete";
-	public static inline var CANCEL = "cancel";
-	public static inline var SCROLL = "scroll";
-	public static inline var READY = "ready";
-	public static inline var CONTEXT_LOST = "contextLost";
-	public static inline var CONTEXT_RESTORED = "contextRestored";
+
+
+/**
+ * Событие в стиле Starling для совместимости.
+ */
+ @:keep
+class Event {
 	
-	/** The type of event. */
-	public var type(default, null):String;
+	// === Стандартные типы событий ===
+	@:isVar public static var CANCELLED(get, never):String;
+	private static inline function get_CANCELLED():String return "cancelled";
 	
-	/** Determines whether the event bubbles up the display tree. */
-	public var bubbles(default, null):Bool;
+	@:isVar public static var CHANGE(get, never):String;
+	private static inline function get_CHANGE():String return "change";
 	
-	/** The object that dispatched the event. */
-	public var target(default, null):EventDispatcher;
+	@:isVar public static var CONTEXT3D_CREATE(get, never):String;
+	private static inline function get_CONTEXT3D_CREATE():String return "context3d_create";
 	
-	/** The current object in the event flow. */
-	public var currentTarget(default, null):EventDispatcher;
+	@:isVar public static var ENTER_FRAME(get, never):String;
+	private static inline function get_ENTER_FRAME():String return "enter_frame";
 	
-	/** Indicates whether the event is prevented from bubbling. */
-	var _stopsPropagation:Bool = false;
+	@:isVar public static var RESIZE(get, never):String;
+	private static inline function get_RESIZE():String return "resize";
 	
-	/** Indicates whether the event is prevented from being processed by additional listeners. */
-	var _stopsImmediatePropagation:Bool = false;
+	// === Свойства события ===
 	
-	/** Data associated with the event. */
-	public var data:Dynamic;
+	/** Тип события */
+	@:isVar public var type(get, never):String;
+	private var _type:String;
+	private inline function get_type():String return _type;
+	
+	/** Целевой объект */
+	@:isVar public var target(get, set):Dynamic;
+	private var _target:Dynamic;
+	private inline function get_target():Dynamic return _target;
+	private inline function set_target(v:Dynamic):Dynamic {
+		_target = v;
+		return v;
+	}
+	
+	/** Координаты (для событий ввода) */
+	@:isVar public var x(get, set):Float;
+	private var _x:Float = 0;
+	private inline function get_x():Float return _x;
+	private inline function set_x(v:Float):Float { _x = v; return v; }
+	
+	@:isVar public var y(get, set):Float;
+	private var _y:Float = 0;
+	private inline function get_y():Float return _y;
+	private inline function set_y(v:Float):Float { _y = v; return v; }
+	
+	/** Дополнительные данные */
+	@:isVar public var data(get, set):Dynamic;
+	private var _data:Dynamic;
+	private inline function get_data():Dynamic return _data;
+	private inline function set_data(v:Dynamic):Dynamic { _data = v; return v; }
+	
+	/** Флаг отмены события */
+	@:isVar public var isDefaultPrevented(get, never):Bool;
+	private var _prevented:Bool = false;
+	private inline function get_isDefaultPrevented():Bool return _prevented;
 	
 	/**
-	 * Creates an Event object to pass as a parameter to event handlers.
+	 * Создаёт новое событие.
 	 */
-	public function new(type:String, bubbles:Bool = false, data:Dynamic = null)
-	{
-		this.type = type;
-		this.bubbles = bubbles;
-		this.data = data;
+	@:overload(function(type:String):Void {})
+	public function new(type:String, x:Float = 0, y:Float = 0, 
+	                   ?data:Dynamic, ?button:Null<Int>) {
+		_type = type;
+		_x = x;
+		_y = y;
+		_data = data;
 	}
 	
 	/**
-	 * Prevents further processing of the event by additional listeners of the current target.
+	 * Предотвращает выполнение действия по умолчанию.
 	 */
-	public function stopImmediatePropagation():Void
-	{
-		_stopsImmediatePropagation = true;
+	@:noCompletion
+	public function preventDefault():Void {
+		_prevented = true;
 	}
 	
 	/**
-	 * Prevents the event from bubbling up the display tree.
+	 * Создаёт копию события.
 	 */
-	public function stopPropagation():Void
-	{
-		_stopsPropagation = true;
+	@:noCompletion
+	public function clone():Event {
+		return new Event(_type, _x, _y, _data);
 	}
 	
 	/**
-	 * Returns a copy of this Event object.
+	 * Строковое представление.
 	 */
-	public function clone():Event
-	{
-		return new Event(type, bubbles, data);
-	}
-	
-	/**
-	 * Checks whether the event has stopped propagation.
-	 */
-	public function isStopped():Bool
-	{
-		return _stopsImmediatePropagation || _stopsPropagation;
-	}
-	
-	/**
-	 * Checks whether immediate propagation has been stopped.
-	 */
-	public function isImmediateStopped():Bool
-	{
-		return _stopsImmediatePropagation;
+	@:noCompletion
+	public function toString():String {
+		return '[Event type="${_type}" x=${_x} y=${_y}]';
 	}
 }
